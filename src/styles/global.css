@@ -1,0 +1,241 @@
+/* Palettes drive everything; inline SVGs borrow the same variables. */
+:root {
+  --bg: #16161a;
+  --surface: #1e1e24;
+  --fg: #e6e3da;
+  --muted: #9a978f;
+  --border: #33333c;
+  --accent: #e8a04c;
+  --accent-ink: #16161a;
+  --sketch: #b8b5ac;
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #f7f4ec;
+  --surface: #fffdf7;
+  --fg: #2b2924;
+  --muted: #6f6b60;
+  --border: #ddd8ca;
+  --accent: #c07a24;
+  --accent-ink: #fffdf7;
+  --sketch: #8f8a7d;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration-style: wavy;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 1.9rem;
+  margin: 0 0 0.4rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+header.site {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+header.site .brand {
+  font-family: 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+header.site .brand:hover {
+  color: var(--accent);
+}
+
+header.site nav {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  font-size: 0.9rem;
+}
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--fg);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.7rem;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+article.post {
+  margin-bottom: 3rem;
+}
+
+article.post h2 {
+  font-size: 1.35rem;
+  margin: 0 0 0.3rem;
+}
+
+article.post h2 a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+article.post h2 a:hover {
+  color: var(--accent);
+}
+
+article.post .excerpt {
+  margin: 0.4rem 0 0.6rem;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.6rem 0 0;
+  font-size: 0.8rem;
+}
+
+.tags li {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.05rem 0.6rem;
+  color: var(--muted);
+}
+
+hr.rule {
+  border: 0;
+  border-top: 1px dashed var(--border);
+  margin: 2.5rem 0;
+}
+
+/* Longhand article typography */
+.prose h2 {
+  font-size: 1.4rem;
+  margin-top: 2.2rem;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: block;
+  margin: 1.5rem auto;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--accent);
+  margin: 1.5rem 0;
+  padding: 0.2rem 0 0.2rem 1.2rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.prose code {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: 0.88em;
+  padding: 0.1em 0.35em;
+}
+
+.prose pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow-x: auto;
+  padding: 1rem 1.2rem;
+}
+
+.prose pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+.pager {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+  font-size: 0.95rem;
+}
+
+footer.site {
+  border-top: 1px dashed var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 4rem;
+  padding-top: 1.2rem;
+}
+
+footer.site .dot {
+  color: var(--accent);
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 1rem;
+  }
+
+  header.site {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+}

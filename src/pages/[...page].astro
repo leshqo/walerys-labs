@@ -1,0 +1,79 @@
+---
+// @ts-check
+import type { CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { isoDate } from '../lib/format';
+import { paginate, sortedPosts, PAGE_SIZE } from '../lib/posts';
+
+export async function getStaticPaths({ paginate }: { paginate: Function }) {
+  const posts = await sortedPosts();
+  return paginate(posts, { pageSize: PAGE_SIZE });
+}
+
+interface Props {
+  page: {
+    data: CollectionEntry<'posts'>[];
+    currentPage: number;
+    lastPage: number;
+    url: { prev?: string; next?: string };
+  };
+}
+
+const { page } = Astro.props;
+---
+
+<Base
+  title={page.currentPage > 1 ? `Notatki — strona ${page.currentPage}` : 'labs.walerys.app'}
+  description="Eksperymenty, automatyzacja i techniczne notatki. Statyczny blog zbudowany raz i serwowany zawsze."
+>
+  <h1>Notatki</h1>
+  <p class="muted">Strona {page.currentPage} z {page.lastPage}</p>
+  {page.currentPage === 1 && (
+    <svg
+      viewBox="0 0 220 120"
+      width="220"
+      height="120"
+      role="img"
+      aria-label="Szkic: kolba laboratoryjna, błądzący kabel i mała chmura"
+      style="display:block; margin: 0.5rem 0 2rem;"
+    >
+      <path d="M158 26 q6 -10 16 -7 q4 -8 13 -5 q9 2 8 11 q8 3 4 10 q-3 5 -11 4 h-24 q-9 0 -6 -13z"
+        fill="none" stroke="var(--sketch)" stroke-width="2.4" stroke-linecap="round" opacity="0.9"/>
+      <path d="M60 78 C90 96, 118 30, 150 40"
+        fill="none" stroke="var(--sketch)" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M52 30 h16 M56 30 v18 l-14 26 q-3 8 6 9 h24 q9 -1 6 -9 l-14 -26 v-18"
+        fill="none" stroke="var(--fg)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M47 70 q13 6 26 0 l6 11 q2 6 -6 6 h-26 q-8 0 -6 -6 z"
+        fill="var(--accent)" opacity="0.85"/>
+      <circle cx="56" cy="64" r="2" fill="none" stroke="var(--fg)" stroke-width="1.6"/>
+      <circle cx="66" cy="58" r="1.6" fill="none" stroke="var(--fg)" stroke-width="1.6"/>
+    </svg>
+  )}
+
+  {page.data.map((post) => (
+    <article class="post">
+      <p class="muted">
+        <time datetime={post.data.pubDate.toISOString()}>{isoDate(post.data.pubDate)}</time>
+        · {post.data.readingMinutes} min
+      </p>
+      <h2><a href={`/${post.data.slug}/`}>{post.data.title}</a></h2>
+      <p class="excerpt">{post.data.description}</p>
+      <ul class="tags">
+        {post.data.tags.map((tag) => (
+          <li>{tag}</li>
+        ))}
+      </ul>
+    </article>
+  ))}
+
+  {page.data.length === 0 && <p class="muted">Jeszcze pusto. Pierwsza notatka wkrótce.</p>}
+
+  <nav class="pager">
+    <span>
+      {page.url.prev && <a href={page.url.prev}>← nowsze</a>}
+    </span>
+    <span>
+      {page.url.next && <a href={page.url.next}>starsze →</a>}
+    </span>
+  </nav>
+</Base>

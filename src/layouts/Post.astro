@@ -1,0 +1,33 @@
+---
+// @ts-check
+import Base from './Base.astro';
+import { isoDate } from '../lib/format';
+
+interface Props {
+  post: {
+    data: {
+      title: string;
+      description: string;
+      pubDate: Date;
+      tags: string[];
+      readingMinutes: number;
+    };
+  };
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, tags, readingMinutes } = post.data;
+---
+
+<Base title={title} description={description}>
+    <article class="prose">
+      <p class="muted">
+        <time datetime={pubDate.toISOString()}>{isoDate(pubDate)}</time>
+        · {readingMinutes} min · {tags.join(', ')}
+      </p>
+      <h1>{title}</h1>
+      <slot />
+      <hr class="rule" />
+      <p class="muted"><a href="/">← nowsze notatki</a></p>
+    </article>
+</Base>

@@ -1,0 +1,90 @@
+---
+// @ts-check
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const site = Astro.site ?? new URL('https://labs.walerys.app');
+const canonical = new URL(Astro.url.pathname, site);
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="labs.walerys.app"
+      href={new URL('rss.xml', site)}
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // Visit starts dark; an explicit light choice travels through internal links
+      // and is remembered, but a stale saved preference never overrides the dark default.
+      (function () {
+        var t = 'dark';
+        try {
+          if (sessionStorage.getItem('theme')) t = sessionStorage.getItem('theme');
+        } catch (e) {}
+        document.documentElement.dataset.theme = t;
+        window.__walerysTheme = t;
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="site">
+        <a class="brand" href="/">labs.walerys.app</a>
+        <nav>
+          <a href="/about/">o&nbsp;mnie</a>
+          <a href="/rss.xml">rss</a>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Zmień motyw">
+            <span id="theme-icon" aria-hidden="true"></span>
+          </button>
+        </nav>
+      </header>
+      <main id="main">
+        <slot />
+      </main>
+      <footer class="site">
+        <p>
+          <span class="dot">*</span> Serce bełkocze, mysz skrobie. Statyczny notatnik z
+          eksperymentów — budowany raz, serwowany zawsze.
+          <a href="/about/#o-nazwie">Dlaczego labs?</a>
+        </p>
+      </footer>
+    </div>
+    <script>
+      // Small, deliberate JavaScript: theme switch without a framework runtime.
+      declare global {
+        interface Window {
+          __walerysTheme?: 'dark' | 'light';
+        }
+      }
+      const root = document.documentElement;
+      const icon = document.getElementById('theme-icon');
+      const set = (t: 'dark' | 'light') => {
+        root.dataset.theme = t;
+        window.__walerysTheme = t;
+        try {
+          localStorage.setItem('theme', t);
+          sessionStorage.setItem('theme', t);
+        } catch (e) {}
+        if (icon) icon.textContent = t === 'dark' ? '☀' : '☾';
+      };
+      set(window.__walerysTheme === 'light' ? 'light' : 'dark');
+      document.getElementById('theme-toggle')?.addEventListener('click', () => {
+        set(window.__walerysTheme === 'light' ? 'dark' : 'light');
+      });
+    </script>
+  </body>
+</html>
