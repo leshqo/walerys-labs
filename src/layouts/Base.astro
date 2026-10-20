@@ -13,12 +13,18 @@ const canonical = new URL(Astro.url.pathname, site);
 ---
 
 <!doctype html>
-<html lang="pl">
+<html lang="pl" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="labs.walerys.app" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="pl_PL" />
     <link rel="canonical" href={canonical} />
     <link
       rel="alternate"
@@ -28,31 +34,30 @@ const canonical = new URL(Astro.url.pathname, site);
     />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline>
-      // Visit starts dark; an explicit light choice travels through internal links
-      // and is remembered, but a stale saved preference never overrides the dark default.
+      // Keep the explicit choice within this tab; a fresh session starts dark.
       (function () {
-        var t = 'dark';
         try {
-          if (sessionStorage.getItem('theme')) t = sessionStorage.getItem('theme');
-        } catch (e) {}
-        document.documentElement.dataset.theme = t;
-        window.__walerysTheme = t;
+          document.documentElement.dataset.theme =
+            sessionStorage.getItem('theme') === 'light' ? 'light' : 'dark';
+        } catch {}
       })();
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main">Przejdź do treści</a>
     <div class="wrap">
       <header class="site">
         <a class="brand" href="/">labs.walerys.app</a>
-        <nav>
+        <nav aria-label="Nawigacja główna">
           <a href="/about/">o&nbsp;mnie</a>
           <a href="/rss.xml">rss</a>
-          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Zmień motyw">
+          <button class="theme-toggle" id="theme-toggle" type="button"
+            aria-label="Jasny motyw" aria-pressed="false" hidden>
             <span id="theme-icon" aria-hidden="true"></span>
           </button>
         </nav>
       </header>
-      <main id="main">
+      <main id="main" tabindex="-1">
         <slot />
       </main>
       <footer class="site">
@@ -65,25 +70,21 @@ const canonical = new URL(Astro.url.pathname, site);
     </div>
     <script>
       // Small, deliberate JavaScript: theme switch without a framework runtime.
-      declare global {
-        interface Window {
-          __walerysTheme?: 'dark' | 'light';
-        }
-      }
+      const button = document.getElementById('theme-toggle');
       const root = document.documentElement;
       const icon = document.getElementById('theme-icon');
       const set = (t: 'dark' | 'light') => {
         root.dataset.theme = t;
-        window.__walerysTheme = t;
+        button?.setAttribute('aria-pressed', String(t === 'light'));
         try {
-          localStorage.setItem('theme', t);
           sessionStorage.setItem('theme', t);
-        } catch (e) {}
+        } catch {}
         if (icon) icon.textContent = t === 'dark' ? '☀' : '☾';
       };
-      set(window.__walerysTheme === 'light' ? 'light' : 'dark');
-      document.getElementById('theme-toggle')?.addEventListener('click', () => {
-        set(window.__walerysTheme === 'light' ? 'dark' : 'light');
+      set(root.dataset.theme === 'light' ? 'light' : 'dark');
+      if (button) button.hidden = false;
+      button?.addEventListener('click', () => {
+        set(root.dataset.theme === 'light' ? 'dark' : 'light');
       });
     </script>
   </body>

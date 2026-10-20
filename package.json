@@ -1,5 +1,6 @@
 {
-  "name": "walerys-labs",
+  "name": "walerys_labs",
+  "private": true,
   "type": "module",
   "version": "0.0.1",
   "engines": {

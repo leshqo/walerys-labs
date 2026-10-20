@@ -1,22 +1,18 @@
 ---
 // @ts-check
+import type { GetStaticPaths, Page } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { isoDate } from '../lib/format';
-import { paginate, sortedPosts, PAGE_SIZE } from '../lib/posts';
+import { sortedPosts, PAGE_SIZE } from '../lib/posts';
 
-export async function getStaticPaths({ paginate }: { paginate: Function }) {
+export const getStaticPaths = (async ({ paginate }) => {
   const posts = await sortedPosts();
   return paginate(posts, { pageSize: PAGE_SIZE });
-}
+}) satisfies GetStaticPaths;
 
 interface Props {
-  page: {
-    data: CollectionEntry<'posts'>[];
-    currentPage: number;
-    lastPage: number;
-    url: { prev?: string; next?: string };
-  };
+  page: Page<CollectionEntry<'posts'>>;
 }
 
 const { page } = Astro.props;
@@ -68,12 +64,14 @@ const { page } = Astro.props;
 
   {page.data.length === 0 && <p class="muted">Jeszcze pusto. Pierwsza notatka wkrótce.</p>}
 
-  <nav class="pager">
-    <span>
-      {page.url.prev && <a href={page.url.prev}>← nowsze</a>}
-    </span>
-    <span>
-      {page.url.next && <a href={page.url.next}>starsze →</a>}
-    </span>
-  </nav>
+  {(page.url.prev || page.url.next) && (
+    <nav class="pager" aria-label="Strony archiwum">
+      <span>
+        {page.url.prev && <a href={page.url.prev} rel="prev">← nowsze</a>}
+      </span>
+      <span>
+        {page.url.next && <a href={page.url.next} rel="next">starsze →</a>}
+      </span>
+    </nav>
+  )}
 </Base>

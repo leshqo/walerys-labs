@@ -8,6 +8,13 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Gotchas
+
+- **Route conflict:** never create `src/pages/index.astro`; it collides with
+  `src/pages/[...page].astro` (the archive with pagination is the homepage).
+- **DNS:** the wildcard `* CNAME → walerys.app` at myDevil (DeviWEB panel) is intentional —
+  do not remove it. The explicit `labs CNAME leshqo.github.io` record takes priority.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

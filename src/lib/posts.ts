@@ -11,12 +11,4 @@ export async function sortedPosts() {
   );
 }
 
-export function paginate<T>(items: T[], { pageSize }: { pageSize: number }): T[][] {
-  const pages: T[][] = [];
-  for (let i = 0; i < items.length; i += pageSize) {
-    pages.push(items.slice(i, i + pageSize));
-  }
-  return pages.length > 0 ? pages : [[]];
-}
-
 export const PAGE_SIZE = 10;

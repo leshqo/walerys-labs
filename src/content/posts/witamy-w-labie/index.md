@@ -12,13 +12,18 @@ plik Markdown w repozytorium, commit, build na GitHub Actions i statyczny plik n
 
 ## Jak to działa
 
-Cztery elementy, cztery różne funkcje:
+Elementy mają różne, jasno rozdzielone funkcje:
 
 - **Astro** buduje stronę. Czyta treść, nakłada layouty, generuje strony i listy.
-- **GitHub Actions** sprawdza (`astro check`) i buduje (`astro build`) po każdym pushu.
+- **GitHub Actions** sprawdza (`astro check`) i buduje (`astro build`) pull requesty,
+  pushe do `main` oraz ręczne uruchomienia. Pull request nie publikuje strony;
+  wdrożenie następuje po udanym buildzie tylko z `main`, także przy ręcznym uruchomieniu.
 - **GitHub Pages** serwuje gotowe pliki. Nikt nie uruchamia aplikacji na serwerze, żeby
   przeczytać akapit.
-- **Cloudflare** prowadzi DNS dla `labs.walerys.app`.
+- **OVH** jest rejestratorem domeny. DNS obsługuje własny serwer DNS,
+  a **myDevil** zapewnia hosting i wsparcie domeny — sam blog działa na Pages.
+  Nie ma tu zależności od Cloudflare. GitHub Pages obsługuje certyfikat TLS
+  i wymusza połączenia HTTPS.
 
 Całość jest statyczna z wyboru, nie z braku możliwości:
 
@@ -46,8 +51,14 @@ readingMinutes: 4
 ---
 ```
 
-Brakujące pole wysadzi build zanim cokolwiek opublikuję. Wolę złapać to w CI niż po
-fakcie na produkcji.
+Wymagane są `title`, `description`, `slug`, `pubDate` i `readingMinutes`.
+`tags` jest opcjonalne i domyślnie ma wartość `[]`. Czas czytania wpisuję ręcznie.
+Niepoprawne wymagane metadane zatrzymają build, zanim treść trafi do publikacji.
+
+Nie ma jednak filtra szkiców ani przyszłych dat: `draft: true` nie ukrywa wpisu,
+a przyszłe `pubDate` nie odracza publikacji. Folder `_szkice` też nie jest
+zabezpieczeniem — loader pomija nazwy plików zaczynające się od `_`, nie całe
+katalogi, więc `_szkice/index.md` nadal może zostać opublikowany.
 
 ## Czego tu nie będzie
 
