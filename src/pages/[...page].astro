@@ -50,7 +50,7 @@ const { page } = Astro.props;
     <article class="post">
       <p class="muted">
         <time datetime={post.data.pubDate.toISOString()}>{isoDate(post.data.pubDate)}</time>
-        · {post.data.readingMinutes} min
+        · {post.data.readingMinutes} min read
       </p>
       <h2><a href={`/${post.data.slug}/`}>{post.data.title}</a></h2>
       <p class="excerpt">{post.data.description}</p>

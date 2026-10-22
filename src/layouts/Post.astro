@@ -23,7 +23,7 @@ const { title, description, pubDate, tags, readingMinutes } = post.data;
     <article class="prose">
       <p class="muted">
         <time datetime={pubDate.toISOString()}>{isoDate(pubDate)}</time>
-        · {readingMinutes} min · {tags.join(', ')}
+        · {readingMinutes} min read · {tags.join(', ')}
       </p>
       <h1>{title}</h1>
       <slot />
