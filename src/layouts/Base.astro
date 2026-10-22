@@ -13,7 +13,7 @@ const canonical = new URL(Astro.url.pathname, site);
 ---
 
 <!doctype html>
-<html lang="pl" data-theme="dark">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,15 +44,16 @@ const canonical = new URL(Astro.url.pathname, site);
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#main">Przejdź do treści</a>
+    <a class="skip-link" href="#main">Skip to content</a>
     <div class="wrap">
       <header class="site">
         <a class="brand" href="/">labs.walerys.app</a>
-        <nav aria-label="Nawigacja główna">
-          <a href="/about/">o&nbsp;mnie</a>
-          <a href="/rss.xml">rss</a>
+        <nav aria-label="Main navigation">
+          <a href="/">labs</a>
+          <a href="/about/">about</a>
+          <a href="https://www.linkedin.com/in/leszekwalerys/" rel="me noopener">linkedin</a>
           <button class="theme-toggle" id="theme-toggle" type="button"
-            aria-label="Jasny motyw" aria-pressed="false" hidden>
+            aria-label="Light theme" aria-pressed="false" hidden>
             <span id="theme-icon" aria-hidden="true"></span>
           </button>
         </nav>
@@ -62,9 +63,9 @@ const canonical = new URL(Astro.url.pathname, site);
       </main>
       <footer class="site">
         <p>
-          <span class="dot">*</span> Serce bełkocze, mysz skrobie. Statyczny notatnik z
-          eksperymentów — budowany raz, serwowany zawsze.
-          <a href="/about/#o-nazwie">Dlaczego labs?</a>
+          <span class="dot">*</span> The heart mumbles, the mouse scratches. A static
+          notebook of experiments — built once, served always.
+          <a href="/about/#the-name">Why labs?</a>
         </p>
       </footer>
     </div>

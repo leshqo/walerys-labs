@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ site }) => {
 
   return rss({
     title: 'labs.walerys.app',
-    description: 'Eksperymenty, automatyzacja i techniczne notatki.',
+    description: 'Experiments, automation and technical notes.',
     site: site ?? 'https://labs.walerys.app',
     items: posts.map((post) => ({
       title: post.data.title,
@@ -16,6 +16,6 @@ export const GET: APIRoute = async ({ site }) => {
       pubDate: post.data.pubDate,
       link: `/${post.data.slug}/`,
     })),
-    customData: '<language>pl</language>',
+    customData: '<language>en</language>',
   });
 };

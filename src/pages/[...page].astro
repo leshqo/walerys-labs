@@ -19,11 +19,11 @@ const { page } = Astro.props;
 ---
 
 <Base
-  title={page.currentPage > 1 ? `Notatki — strona ${page.currentPage}` : 'labs.walerys.app'}
-  description="Eksperymenty, automatyzacja i techniczne notatki. Statyczny blog zbudowany raz i serwowany zawsze."
+  title={page.currentPage > 1 ? `Notes — page ${page.currentPage}` : 'labs.walerys.app'}
+  description="Experiments, automation and technical notes. A static blog built once and served always."
 >
-  <h1>Notatki</h1>
-  <p class="muted">Strona {page.currentPage} z {page.lastPage}</p>
+  <h1>Notes</h1>
+  <p class="muted">Page {page.currentPage} of {page.lastPage}</p>
   {page.currentPage === 1 && (
     <svg
       viewBox="0 0 220 120"
@@ -62,15 +62,15 @@ const { page } = Astro.props;
     </article>
   ))}
 
-  {page.data.length === 0 && <p class="muted">Jeszcze pusto. Pierwsza notatka wkrótce.</p>}
+  {page.data.length === 0 && <p class="muted">Nothing here yet. First note coming soon.</p>}
 
   {(page.url.prev || page.url.next) && (
-    <nav class="pager" aria-label="Strony archiwum">
+    <nav class="pager" aria-label="Archive pages">
       <span>
-        {page.url.prev && <a href={page.url.prev} rel="prev">← nowsze</a>}
+        {page.url.prev && <a href={page.url.prev} rel="prev">← newer</a>}
       </span>
       <span>
-        {page.url.next && <a href={page.url.next} rel="next">starsze →</a>}
+        {page.url.next && <a href={page.url.next} rel="next">older →</a>}
       </span>
     </nav>
   )}
