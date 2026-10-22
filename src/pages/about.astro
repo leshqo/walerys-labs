@@ -1,34 +1,145 @@
 ---
 // @ts-check
+import { Image } from 'astro:assets';
+import portrait from '../assets/leszek-portrait.webp';
 import Base from '../layouts/Base.astro';
 ---
 
-<Base title="About — labs.walerys.app" description="Who writes this notebook and why it's called labs.">
-  <article class="prose">
-    <h1>About</h1>
+<Base
+  title="About — labs.walerys.app"
+  description="I'm Leszek. Engineering global enterprise systems, making repetitive work disappear, and building across software and hardware."
+  profile
+>
+  <article class="prose about">
+    <h1 id="about">About</h1>
+    <div class="about-intro">
+      <div class="about-intro-copy">
+        <p class="about-label">The person behind Labs</p>
+        <p>
+          I’m Leszek. I lead engineering teams behind global enterprise systems, where
+          high availability and scalability are everyday requirements. Keeping services
+          dependable around the clock shapes how I think about architecture, change,
+          and the complexity we choose to take on.
+        </p>
+      </div>
+      <figure class="portrait">
+        <div class="portrait-frame">
+          <Image
+            src={portrait}
+            alt="Black-and-white portrait of Leszek, resting his chin on his hand."
+            widths={[240, 480, 720]}
+            sizes="(max-width: 540px) 240px, 208px"
+            width={720}
+            height={720}
+            loading="eager"
+            class="portrait-image"
+          />
+        </div>
+        <figcaption>Leszek / behind the labs</figcaption>
+      </figure>
+    </div>
+
     <p>
-      Automation, integrations, experiments with home and network. Professionally I work
-      with systems; privately I take them apart to understand how they work.
+      At that scale, repetitive manual work is more than a nuisance — it is a source of
+      operational risk. I appreciate a particular kind of engineering laziness: the
+      willingness to do the hard work once so nobody has to keep doing the routine work.
+      That instinct carries into my own experiments, too.
     </p>
 
-    <h2 id="the-name">Why labs?</h2>
+    <h2 id="from-code-to-hardware">From code to hardware</h2>
     <p>
-      Because this is a laboratory, not a product. Posts are notes from experiments: what
-      I tried, what worked, what surprised me. Nothing here is a dissertation — sometimes
-      it will be wrong, and a correction becomes another post.
+      That interest in what sits underneath started early. The day we brought home our
+      first computer, I took it apart to see how the components matched what I’d read.
+      It went back together with no screws left over — and left me wanting to understand
+      both the machine and the code.
+    </p>
+    <p>
+      At home, that curiosity extends into the walls. I built my smart home from the
+      electrical installation up, bringing wiring, hardware, and software together as
+      one system. Different scale, same instinct: follow the dependencies and understand
+      how the whole thing works.
     </p>
 
-    <h2>The site</h2>
+    <h2 id="why-labs">Why labs?</h2>
     <p>
-      <a href="https://astro.build/">Astro</a> builds it, <a href="https://actions.github.com/">GitHub
-      Actions</a> checks and ships it, and <a href="https://pages.github.com/">GitHub Pages</a>
-      serves the finished blog. Changing the site is a commit, not manual file uploads.
+      Labs is my personal space for experiments and lessons that are worth keeping:
+      software, hardware, automation, and better ways of working. Not a portfolio of
+      polished answers, but a record of what I tried, what happened, and what I would
+      change next time.
     </p>
     <p>
-      The domain is registered with <a href="https://www.ovhcloud.com/">OVH</a>.
-      I use my own DNS server and hosting with domain support on
-      <a href="https://www.mydevil.net/">myDevil</a>. Those are separate pieces of
-      infrastructure — the blog itself is published on GitHub Pages.
+      Writing it down helps me think more clearly. Sharing it gives someone else a
+      starting point — or a chance to show me what I missed.
     </p>
   </article>
 </Base>
+
+<style>
+  .about-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 13rem;
+    align-items: center;
+    gap: 2rem;
+    margin: 1.5rem 0 2.5rem;
+  }
+
+  .about-intro-copy {
+    min-width: 0;
+  }
+
+  .about-label {
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .portrait {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .portrait-frame {
+    position: relative;
+    padding: 0.45rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    clip-path: polygon(0 0, calc(100% - 1.5rem) 0, 100% 1.5rem, 100% 100%, 0.75rem 100%, 0 calc(100% - 0.75rem));
+  }
+
+  .portrait-frame::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2rem;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .portrait-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    clip-path: polygon(0 0, calc(100% - 1.25rem) 0, 100% 1.25rem, 100% 100%, 0.5rem 100%, 0 calc(100% - 0.5rem));
+  }
+
+  .portrait figcaption {
+    margin-top: 0.65rem;
+    color: var(--muted);
+    font-size: 0.7rem;
+  }
+
+  @media (max-width: 540px) {
+    .about-intro {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .portrait {
+      width: min(15rem, 100%);
+    }
+  }
+</style>

@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ site }) => {
 
   return rss({
     title: 'labs.walerys.app',
-    description: 'Experiments, automation and technical notes.',
+    description: 'A personal laboratory for software, automation, and better ways of working.',
     site: site ?? 'https://labs.walerys.app',
     items: posts.map((post) => ({
       title: post.data.title,

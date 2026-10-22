@@ -2,6 +2,7 @@
 // @ts-check
 import type { GetStaticPaths, Page } from 'astro';
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { isoDate } from '../lib/format';
 import { sortedPosts, PAGE_SIZE } from '../lib/posts';
@@ -19,50 +20,46 @@ const { page } = Astro.props;
 ---
 
 <Base
-  title={page.currentPage > 1 ? `Notes — page ${page.currentPage}` : 'labs.walerys.app'}
-  description="Experiments, automation and technical notes. A static blog built once and served always."
+  title={page.currentPage > 1 ? `Labs — page ${page.currentPage}` : 'Labs'}
+  description="A personal laboratory for software, automation, and better ways of working. Experiments, lessons, and things worth understanding."
 >
-  <h1>Notes</h1>
-  <p class="muted">Page {page.currentPage} of {page.lastPage}</p>
-  {page.currentPage === 1 && (
-    <svg
-      viewBox="0 0 220 120"
-      width="220"
-      height="120"
-      role="img"
-      aria-label="Szkic: kolba laboratoryjna, błądzący kabel i mała chmura"
-      style="display:block; margin: 0.5rem 0 2rem;"
-    >
-      <path d="M158 26 q6 -10 16 -7 q4 -8 13 -5 q9 2 8 11 q8 3 4 10 q-3 5 -11 4 h-24 q-9 0 -6 -13z"
-        fill="none" stroke="var(--sketch)" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-      <path d="M60 78 C90 96, 118 30, 150 40"
-        fill="none" stroke="var(--sketch)" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-      <path d="M52 30 h16 M56 30 v18 l-14 26 q-3 8 6 9 h24 q9 -1 6 -9 l-14 -26 v-18"
-        fill="none" stroke="var(--fg)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M47 70 q13 6 26 0 l6 11 q2 6 -6 6 h-26 q-8 0 -6 -6 z"
-        fill="var(--accent)" opacity="0.85"/>
-      <circle cx="56" cy="64" r="2" fill="none" stroke="var(--fg)" stroke-width="1.6"/>
-      <circle cx="66" cy="58" r="1.6" fill="none" stroke="var(--fg)" stroke-width="1.6"/>
-    </svg>
-  )}
+  <h1>Labs</h1>
+  <p class="archive-intro">A personal laboratory for software, automation, and better ways of working. Experiments, lessons, and things worth understanding.</p>
+  {page.lastPage > 1 && <p class="muted">Page {page.currentPage} of {page.lastPage}</p>}
 
   {page.data.map((post) => (
     <article class="post">
-      <p class="muted">
-        <time datetime={post.data.pubDate.toISOString()}>{isoDate(post.data.pubDate)}</time>
-        · {post.data.readingMinutes} min read
-      </p>
-      <h2><a href={`/${post.data.slug}/`}>{post.data.title}</a></h2>
+      <div class="post-title-row">
+        <div class="post-title-group">
+          <p class="post-meta muted">
+            <time datetime={post.data.pubDate.toISOString()}>{isoDate(post.data.pubDate)}</time>
+            <span>{post.data.readingMinutes} min read</span>
+          </p>
+          <h2><a href={`/${post.data.slug}/`}>{post.data.title}</a></h2>
+        </div>
+        {post.data.thumbnail && (
+          <Image
+            class="post-thumbnail"
+            src={post.data.thumbnail.src}
+            alt={post.data.thumbnail.alt}
+            width={88}
+            height={88}
+            fit="cover"
+          />
+        )}
+      </div>
       <p class="excerpt">{post.data.description}</p>
-      <ul class="tags">
-        {post.data.tags.map((tag) => (
-          <li>{tag}</li>
-        ))}
-      </ul>
+      {post.data.tags.length > 0 && (
+        <ul class="tags">
+          {post.data.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      )}
     </article>
   ))}
 
-  {page.data.length === 0 && <p class="muted">Nothing here yet. First note coming soon.</p>}
+  {page.data.length === 0 && <p class="muted">Nothing here yet. The first experiment is on its way.</p>}
 
   {(page.url.prev || page.url.next) && (
     <nav class="pager" aria-label="Archive pages">

@@ -1,6 +1,6 @@
 # Walerys Labs
 
-Polski, statyczny notatnik techniczny oparty na Astro. Treść mieszka w repozytorium,
+Anglojęzyczne, osobiste laboratorium o technologii, uczeniu się i sposobach pracy, oparte na Astro. Treść mieszka w repozytorium,
 GitHub Actions sprawdza i buduje stronę, a GitHub Pages serwuje gotowe pliki pod
 `https://labs.walerys.app`. Wpisy zachowują adresy `/<slug>/`, bez prefiksu repozytorium.
 
@@ -52,8 +52,8 @@ podaje autor ręcznie jako dodatnią liczbę całkowitą minut — nie jest obli
 Schemat znajduje się w `src/content.config.ts`.
 
 Slug określa publiczny adres, niezależnie od nazwy folderu. Musi być unikalnym,
-bezpiecznym segmentem adresu. Nie używaj zarezerwowanych slugów `about`, `rss.xml`,
-`404` ani slugów złożonych wyłącznie z cyfr: kolidują ze stronami projektu
+bezpiecznym segmentem adresu. Nie używaj zarezerwowanych slugów `about`, `privacy`,
+`rss.xml`, `robots.txt`, `sitemap-index.xml`, `sitemap-0.xml`, `404` ani slugów złożonych wyłącznie z cyfr: kolidują ze stronami projektu
 lub paginacją archiwum. Nie dodawaj `src/pages/index.astro`, ponieważ strona główna
 jest obsługiwana przez `src/pages/[...page].astro`.
 
@@ -62,11 +62,82 @@ jest częścią treści przetwarzanej przez Astro. Pliki w `public/` są kopiowa
 bez przetwarzania; `public/images/schemat.png` ma adres `/images/schemat.png`,
 nie `/public/images/schemat.png`.
 
+Samodzielne obrazy Markdown są składane w `<figure>`. Jeśli następny akapit jest
+wyłącznie kursywą, staje się podpisem `<figcaption>`. PNG z diagramami zachowują
+oryginalną rozdzielczość i bezstratny format; CSS skaluje je bez zniekształceń.
+Wysokie ilustracje mają ograniczoną wysokość w kolumnie tekstu.
+Komponent `ArticleImages.astro` dodaje lokalny odnośnik „Open full-resolution image”
+do obrazu i jego podpowiedzi. Można go otworzyć myszą lub klawiaturą; bez JavaScript
+nadal widoczne są ilustracja, opis alternatywny i podpis.
+
+Opcjonalna miniatura obok tytułu na liście wpisów i w nagłówku artykułu:
+
+```yaml
+thumbnail:
+  src: ./thumbnail.webp
+  alt: Router and test equipment used in the experiment.
+```
+
+`src` wskazuje lokalny obraz; `alt` jest wymaganym, niepustym opisem po angielsku.
+Miniatura nie jest wymagana — bez niej nie powstaje puste miejsce ani obraz zastępczy.
+
+Strona główna używa nazwy **Labs**. Licznik stron i nawigacja paginacji pojawiają się
+dopiero po przekroczeniu 10 wpisów. Tagi są tekstowymi etykietami, nie filtrami.
+Stopka zawiera RSS, About i Privacy oraz pozostaje przy dolnej krawędzi widoku przy krótkiej treści.
+
+Nagłówki Markdown od poziomu H2 do H6 otrzymują podczas budowania link `#`
+do sekcji z angielską etykietą dostępności. Link działa również bez JavaScript.
+Identyfikatory generuje Astro; powtórzone nagłówki dostają odrębne identyfikatory.
+Bloki kodu są kolorowane przez Prism podczas budowania. Korzystają z klas CSS i palety
+strony w obu motywach, bez stylów inline ani dodatkowego JavaScript do kolorowania.
+Mają `tabindex="0"`, aby dało się przewijać długie linie klawiaturą.
+Przycisk `light` / `dark` wskazuje motyw, na który przełączy.
+
+Portret w About pochodzi z `src/assets/leszek-portrait.webp`: zoptymalizowana kopia
+zdjęcia bez retuszu twarzy, z kadrowaniem/oprawą w CSS. Źródłowy PDF historii autora
+nie jest częścią publikacji.
+
 **Nie ma filtra szkiców ani przyszłych dat.** Pole `draft: true` nie ukrywa
 wpisu, a przyszłe `pubDate` nie opóźnia publikacji. Nie przechowuj niegotowych
 tekstów w kolekcji. Wzorzec loadera `**/[^_]*.md` pomija pliki z nazwą zaczynającą
 się od `_`, ale nie wyklucza całych folderów: `_szkice/index.md` nadal pasuje.
 Sam prefiks `_` w nazwie katalogu nie zabezpiecza przed publikacją.
+
+## Metadane, indeksowanie i prywatność
+
+`Base.astro` generuje canonical, Open Graph, karty Twitter/X i wskazanie autora.
+Domyślny obraz udostępniania to `public/social/labs.png` (1200 × 630, PNG).
+Przy wymianie pliku zachowaj wymiary lub uaktualnij je i opis alternatywny w layoucie.
+Gdy artykuł ma miniaturę, Astro generuje z niej PNG do udostępniania i podaje jej
+rzeczywiste wymiary. Grafika marki nie jest deklarowana jako ilustracja artykułu w JSON-LD.
+
+Wpisy mają `og:type=article`, datę publikacji, widoczny podpis autora i JSON-LD
+`BlogPosting`. About zawiera `ProfilePage` z obiektem `Person` i odnośnikiem do LinkedIn.
+Nie generujemy daty modyfikacji z czasu buildu ani nie deklarujemy niepodanych informacji.
+Treść JSON-LD jest zabezpieczona przed zamknięciem elementu `<script>` przez tekst wpisu.
+
+Integracja `@astrojs/sitemap` generuje `sitemap-index.xml` i mapy podrzędne,
+obejmujące również dynamiczne trasy i paginację. `robots.txt` wskazuje indeks mapy
+i korzysta z tej samej konfiguracji `site`. Strona 404 jest wykluczona z mapy,
+ma `noindex, follow` i nie zawiera canonical ani `og:url`. Nie blokujemy jej w robots.txt.
+
+Publiczna informacja `/privacy/` opisuje GitHub Pages, logowanie IP do celów bezpieczeństwa,
+preferencję motywu oraz kontakt przez LinkedIn. Nie ma obecnie analityki, reklam ani
+osadzonych widgetów. Przed dodaniem formularzy, analityki, newslettera czy zewnętrznych
+embedów trzeba ponownie ocenić faktyczne przetwarzanie i uaktualnić tę informację.
+Po wdrożeniu należy osobno sprawdzić URL w Search Console i podgląd linku na LinkedIn —
+lokalny build nie potwierdza indeksacji ani odświeżenia pamięci podręcznej serwisów.
+
+Astro generuje CSP w `<meta>` z hashami skryptów i stylów; nie używamy `unsafe-inline`
+ani `unsafe-eval`. Skrypt inicjujący motyw i JSON-LD mają jawnie zarejestrowane hashe.
+Polityka ogranicza zasoby do własnej domeny (obrazy mogą też używać `data:`),
+blokuje połączenia skryptowe, obiekty, ramki i wysyłanie formularzy.
+Dokument ustawia także `strict-origin-when-cross-origin` przez `<meta name="referrer">`.
+To nie są nagłówki HTTP: GitHub Pages nie daje tu konfiguracji HSTS, `X-Content-Type-Options`,
+`X-Frame-Options` ani `Permissions-Policy`. CSP w meta nie obsługuje `frame-ancestors`;
+nie deklarujemy ochrony przed osadzaniem samego bloga w cudzej ramce.
+Nie dodawaj atrap `_headers` ani `http-equiv` dla polityk, których przeglądarka tak nie egzekwuje.
+
 
 ## Publikacja i infrastruktura
 
@@ -110,5 +181,6 @@ zmienne `PUBLIC_*` nie służą do przechowywania sekretów.
 `SESSION_CONTEXT.md` jest ignorowaną, lokalną notatką z sesji, nie publiczną
 dokumentacją ani miejscem na dane uwierzytelniające.
 
-Motyw jest zapamiętywany w `sessionStorage`: wybór dotyczy bieżącej sesji karty,
-nie jest trwałym ustawieniem konta ani ustawieniem przechowywanym w `localStorage`.
+Motyw jest zapamiętywany w `sessionStorage` wyłącznie po kliknięciu przycisku:
+wybór dotyczy bieżącej sesji karty, nie jest trwałym ustawieniem konta ani ustawieniem
+przechowywanym w `localStorage`. Pierwsze wejście i odczyt istniejącej preferencji nie zapisują wartości.

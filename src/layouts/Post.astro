@@ -1,33 +1,64 @@
 ---
 // @ts-check
+import { getImage, Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
 import Base from './Base.astro';
 import { isoDate } from '../lib/format';
+import ArticleImages from '../components/ArticleImages.astro';
 
 interface Props {
-  post: {
-    data: {
-      title: string;
-      description: string;
-      pubDate: Date;
-      tags: string[];
-      readingMinutes: number;
-    };
-  };
+  post: CollectionEntry<'posts'>;
 }
 
 const { post } = Astro.props;
-const { title, description, pubDate, tags, readingMinutes } = post.data;
+const { title, description, pubDate, tags, readingMinutes, thumbnail } = post.data;
+const socialImage = thumbnail && await getImage({ src: thumbnail.src, format: 'png' });
+const article = {
+  publishedTime: pubDate.toISOString(),
+  tags,
+  ...(socialImage && thumbnail && {
+    image: {
+      url: socialImage.src,
+      alt: thumbnail.alt,
+      width: thumbnail.src.width,
+      height: thumbnail.src.height,
+    },
+  }),
+};
 ---
 
-<Base title={title} description={description}>
+<Base title={title} description={description} article={article}>
     <article class="prose">
-      <p class="muted">
-        <time datetime={pubDate.toISOString()}>{isoDate(pubDate)}</time>
-        · {readingMinutes} min read · {tags.join(', ')}
-      </p>
-      <h1>{title}</h1>
-      <slot />
+      <header class="article-header">
+        <p class="post-meta">
+          <time datetime={pubDate.toISOString()}>{isoDate(pubDate)}</time>
+          <span>{readingMinutes} min read</span>
+          <span>By <a href="/about/" rel="author">Leszek Walerys</a></span>
+        </p>
+        <div class="post-title-row">
+          <div>
+            <h1>{title}</h1>
+          </div>
+          {thumbnail && (
+            <Image
+              class="post-thumbnail"
+              src={thumbnail.src}
+              alt={thumbnail.alt}
+              width={88}
+              height={88}
+              fit="contain"
+            />
+          )}
+        </div>
+        {tags.length > 0 && (
+          <ul class="tags">
+            {tags.map((tag) => <li>{tag}</li>)}
+          </ul>
+        )}
+      </header>
+      <div class="article-content"><slot /></div>
+      <ArticleImages />
       <hr class="rule" />
-      <p class="muted"><a href="/">← newer notes</a></p>
+      <p class="muted"><a href="/">← Back to labs</a></p>
     </article>
 </Base>

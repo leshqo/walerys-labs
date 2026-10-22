@@ -1,0 +1,21 @@
+<script>
+  // Astro has already resolved each local image to its full-resolution asset.
+  // Enhance the image itself and the visible hint as one keyboard-focusable link.
+  for (const image of document.querySelectorAll<HTMLImageElement>('.article-content .article-figure > img')) {
+    const url = new URL(image.src, window.location.href);
+    if (url.origin !== window.location.origin) continue;
+
+    const link = document.createElement('a');
+    link.href = url.href;
+    link.className = 'article-image-link';
+    link.setAttribute('aria-label', `Open full-resolution image: ${image.alt}`);
+
+    const hint = document.createElement('span');
+    hint.className = 'article-image-hint';
+    hint.textContent = 'Open full-resolution image';
+    hint.setAttribute('aria-hidden', 'true');
+
+    image.replaceWith(link);
+    link.append(image, hint);
+  }
+</script>
