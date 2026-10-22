@@ -39,12 +39,23 @@ body {
   color: var(--fg);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
 }
 
 .wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   max-width: 42rem;
   margin: 0 auto;
   padding: 2.5rem 1.25rem 4rem;
+  width: 100%;
+}
+
+main#main {
+  flex: 1;
 }
 
 .skip-link {
@@ -100,8 +111,8 @@ h1 {
 header.site {
   display: flex;
   align-items: baseline;
-  justify-content: flex-start;
-  gap: 1.5rem;
+  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 3rem;
 }
 
