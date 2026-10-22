@@ -112,6 +112,7 @@ header.site nav a { display: inline-flex; align-items: center; min-height: 2.75r
 }
 .post-meta > * + *::before { content: '·'; margin-right: 0.65rem; }
 article.post { padding: 1.75rem 0; border-top: 1px solid var(--border); }
+article.post .post-title-row { margin-bottom: 1.25rem; }
 .post-title-row { display: flex; align-items: flex-start; gap: 1.25rem; }
 .post-title-row > div { flex: 1; min-width: 0; }
 .post-thumbnail {
