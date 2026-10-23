@@ -110,4 +110,6 @@ What I expected to take several days was completed in a few hours. More importan
 
 That was the eye-opener. I had been using AI for small pieces of work — recommend a card, write a snippet, explain an option — while keeping the entire burden of putting it together. This time I involved it in the whole task, from inspecting the starting point through design, implementation and review. I still directed the work, but I no longer had to be the person making every edit. That is the approach I will reach for the next time a useful project sits untouched because its individual steps look too tedious to begin.
 
-*Illustrations recreate selected dashboard components with illustrative readings.*
+<aside class="article-note" aria-label="About the illustrations">
+The illustrations recreate selected dashboard components to keep sensitive details of my home setup private. Readings are illustrative.
+</aside>
