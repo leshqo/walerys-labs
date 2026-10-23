@@ -167,8 +167,6 @@ hr.rule { border: 0; border-top: 1px solid var(--border); margin: 2.5rem 0; }
 }
 .article-content .article-note {
   margin-top: 2.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
   color: var(--muted);
   font-family: system-ui, sans-serif;
   font-size: 0.875rem;
