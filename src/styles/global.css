@@ -116,13 +116,12 @@ article.post .post-title-row { margin-bottom: 1.25rem; }
 .post-title-row { display: flex; align-items: flex-start; gap: 1.25rem; }
 .post-title-row > div { flex: 1; min-width: 0; }
 .post-thumbnail {
-  width: 88px;
-  height: 88px;
-  object-fit: cover;
+  width: 176px;
+  height: auto;
+  object-fit: contain;
   flex: 0 0 auto;
-  border: 1px solid var(--border);
 }
-.article-header .post-thumbnail { margin: 0; }
+.article-header .post-thumbnail { width: 144px; margin: 0; }
 article.post h2 { font-size: 1.35rem; margin: 0 0 0.65rem; }
 article.post h2 a { color: var(--fg); text-decoration: none; }
 article.post h2 a:hover { color: var(--accent); }
@@ -230,6 +229,7 @@ footer.site nav { display: flex; gap: 1.25rem; }
   .wrap { padding-top: 1rem; }
   header.site { flex-direction: column; align-items: stretch; gap: 0.4rem; margin-bottom: 2.5rem; }
   header.site nav { align-self: flex-end; gap: 0.9rem; }
-  .post-thumbnail { width: 64px; height: 64px; }
+  .post-thumbnail { width: 104px; }
+  .article-header .post-thumbnail { width: 96px; }
   .post-title-row { gap: 0.8rem; }
 }
